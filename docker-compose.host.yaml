@@ -1,0 +1,171 @@
+# snapshot (optionnal)
+# nettype (default:butterfly)
+# proxy (optional)
+# TZ (optional)
+# genesisfile (optional)
+# proofparameters:  (default:/var/tmp/filecoin-proof-parameters/)
+
+version: '3'
+services:
+  genesis:
+    image: tanlang/lotus-2k:nv18
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts/lotus.sh"
+
+  auth:
+    image: filvenus/venus-auth:latest
+    ports:
+      - 8989:8989
+    environment:
+      - TZ=${TZ-UTC}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    network_mode: "host"
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:5651 -t 0  --  /compose/scripts/venus-auth.sh"
+
+  venus:
+    image: filvenus/venus:latest
+    ports:
+      - 3453:3453
+    network_mode: "host"
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    environment:
+      - GOLOG_LOG_LEVEL=debug
+      - HTTPS_PROXY=${proxy}
+      - nettype=${nettype-butterfly}
+      - TZ=${TZ-UTC}
+      - snapshot=${snapshot}
+      - genesisfile=${genesisfile}
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:8989 -t 0  --  /compose/scripts/venus.sh"
+    depends_on:
+      - auth
+
+  gateway:
+    image: filvenus/venus-gateway:latest
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    ports:
+      - 45132:45132
+
+    entrypoint: "/compose/scripts/venus-gateway.sh"
+    depends_on:
+      - auth
+
+  messager:
+    image: filvenus/venus-messager:latest
+    network_mode: "host"
+    ports:
+      - 39812:39812
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    environment:
+      - TZ=${TZ-UTC}
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:3453 -t 0  -- /compose/scripts/venus-messager.sh"
+    depends_on:
+      - auth
+      - venus
+      - gateway
+
+  miner:
+    image: filvenus/venus-miner:latest
+    network_mode: "host"
+    ports:
+      - 12308:12308
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    environment:
+      - nettype=${nettype-butterfly}
+      - TZ=${TZ-UTC}
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:3453 -t 0  -- /compose/scripts/venus-miner.sh"
+    depends_on:
+      - auth
+      - venus
+      - gateway
+
+  market:
+    image: filvenus/venus-market:latest
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+    ports:
+      - 41235:41235
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:39812 -t 0  -- /compose/scripts/venus-market.sh"
+    depends_on:
+      - auth
+      - venus
+      - gateway
+
+  wallet:
+    image: filvenus/venus-wallet:latest
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+      - nettype=${nettype-butterfly}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    depends_on:
+      - auth
+      - gateway
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:3453 -t 0  -- /compose/scripts/venus-wallet.sh"
+
+  sector-manager:
+    image: filvenus/venus-sector-manager:v0.0.3
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
+
+  woker:
+    image: filvenus/venus-worker:latest
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts//wait-for-it.sh 127.0.0.1:1789 -t 0 -- /compose/scripts/venus-woker.sh"
+
+  ssm:
+    image: filvenus/venus-tool:latest
+    network_mode: "host"
+    environment:
+      - TZ=${TZ-UTC}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/script/wait-for-it.sh 127.0.0.1:41235 -t 0  -- /compose/scripts/venus-tool.sh"

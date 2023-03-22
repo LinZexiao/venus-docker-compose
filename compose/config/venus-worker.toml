@@ -1,0 +1,23 @@
+[worker]
+name = "worker-#1"
+# rpc_server.host = "192.168.1.100"
+# rpc_server.port = 17891
+
+# [metrics]
+
+[sector_manager]
+rpc_client.addr = "/ip4/127.0.0.1/tcp/1789"
+
+
+[sealing]
+enable_deals = true
+max_retries = 3
+
+[[sealing_thread]]
+location = "/root/data/store/store1"
+
+[[attached]]
+name = "persist-store"
+location = "/root/data/pieces/"
+
+[processors.limitation.concurrent]
