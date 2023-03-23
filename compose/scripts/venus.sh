@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Arg: $@"
-Args=" --auth-url=http://127.0.0.1:8989 "
+Args=" --auth-url=http://auth:8989 "
 
 if [ $nettype ]
 then
@@ -15,17 +15,24 @@ fi
 
 Args="$Args --genesisfile=/root/genesis.car"
 
-# wait lotus init
+# wait genesis
 sleep 30
 
 echo "EXEC: /app/venus daemon $Args \n\n"
 /app/venus daemon $Args &
 
-sleep 3
+echo "wait to restart ..."
+sleep 20
+echo "restart ..."
 if [ -f /env/bootstrap ];
 then
     bootstraper=$(cat /env/bootstrap )
     /app/venus swarm connect $bootstraper
     echo "connect to $bootstraper"
 fi
-wait
+
+pkill venus
+jq '.api.apiAddress="/ip4/0.0.0.0/tcp/3453" ' ~/.venus/config.json | jq --arg bp $bootstraper '.bootstrap.addresses +=[ $bp ]' > ~/.venus/config.json.tmp
+mv -f ~/.venus/config.json.tmp ~/.venus/config.json 
+
+/app/venus daemon $Args

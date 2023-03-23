@@ -7,10 +7,10 @@ echo ${token}
 
 
 /app/venus-market run \
---node-url=/ip4/127.0.0.1/tcp/3453  \
---auth-url=http://127.0.0.1:8989 \
---gateway-url=/ip4/127.0.0.1/tcp/45132/ \
---messager-url=/ip4/127.0.0.1/tcp/39812/ \
+--node-url=/dns/node/tcp/3453  \
+--auth-url=http://auth:8989 \
+--gateway-url=/dns/gateway/tcp/45132/ \
+--messager-url=/dns/messager/tcp/39812/ \
 --cs-token=${token} \
 --signer-type="gateway" &
 
@@ -20,4 +20,9 @@ if [ -z "$exist" ]; then
     echo "add piece storage"
     /app/venus-market piece-storage add-fs --name DefaultPieceStorage --path /root/data/pieces
 fi
-wait
+
+pkill venus-market
+
+/compose/bin/toml set ~/.venusmarket/config.toml API.ListenAddress "/ip4/0.0.0.0/tcp/41235" > ~/.venusmarket/config.toml.tmp
+mv -f ~/.venusmarket/config.toml.tmp ~/.venusmarket/config.toml
+/app/venus-market run

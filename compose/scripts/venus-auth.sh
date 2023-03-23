@@ -3,7 +3,8 @@
 echo "Arg: $@"
 /app/venus-auth run  &
 
-sleep 1
+# wait genesis
+sleep 30
 
 # if /env/token is not exist
 if [ ! -f /env/token ]; then

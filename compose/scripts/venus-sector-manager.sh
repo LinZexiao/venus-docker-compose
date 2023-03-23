@@ -46,4 +46,6 @@ if [[ ! -d /root/data/pieces/ ]]; then
     mkdir /root/data/pieces/
 fi
 
+# wait for node warm up
+sleep 30
 venus-sector-manager --net=$nettype daemon run

@@ -18,7 +18,7 @@ then
     Args="$Args --nettype=$nettype"
 fi
 
-Args="$Args run --password=$PSWD --gateway-api=/ip4/127.0.0.1/tcp/45132 --gateway-token=$token --support-accounts=admin"
+Args="$Args run --password=$PSWD --gateway-api=/dns/gateway/tcp/45132 --gateway-token=$token --support-accounts=admin"
 
 
 echo "EXEC: ./venus-wallet $Args \n\n"

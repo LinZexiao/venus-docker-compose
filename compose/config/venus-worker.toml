@@ -6,7 +6,7 @@ name = "worker-#1"
 # [metrics]
 
 [sector_manager]
-rpc_client.addr = "/ip4/127.0.0.1/tcp/1789"
+rpc_client.addr = "/ip4/172.16.20.100/tcp/1789"
 
 
 [sealing]
