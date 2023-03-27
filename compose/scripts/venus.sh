@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+if [[ -d ~/.venus ]];then
+    /app/venus daemon
+else
+
 
 echo "Arg: $@"
 Args=" --auth-url=http://auth:8989 "
@@ -36,3 +41,6 @@ jq '.api.apiAddress="/ip4/0.0.0.0/tcp/3453" ' ~/.venus/config.json | jq --arg bp
 mv -f ~/.venus/config.json.tmp ~/.venus/config.json 
 
 /app/venus daemon $Args
+
+
+fi

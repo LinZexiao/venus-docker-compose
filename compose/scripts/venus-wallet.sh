@@ -41,8 +41,10 @@ then
     echo $ADDR > /env/wallet_address
 fi
 
+if [[ ! -f /env/wallet_api ]];then
 wallet_api=$(venus-wallet auth api-info --perm admin)
 echo "wallet_api: $wallet_api"
 echo $wallet_api > /env/wallet_api
+fi
 
 wait

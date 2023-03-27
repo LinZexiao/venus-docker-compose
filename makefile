@@ -17,7 +17,7 @@ clean: down
 	rm -rf .venus/root/.venus*
 
 genesis:
-	docker-compose -f ./genesis.yaml up -d
+	docker-compose start genesis
 
 clean-all:
 	docker-compose stop
@@ -25,7 +25,4 @@ clean-all:
 	rm -rf .venus
 
 start:
-	docker-compose -f ./genesis.yaml up -d
-	@sleep 15
-	echo finish genesis
 	docker-compose up -d

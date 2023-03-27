@@ -141,7 +141,7 @@ services:
       default:
         ipv4_address: 172.16.20.100
 
-  woker:
+  worker:
     image: filvenus/venus-worker:latest
     environment:
       - TZ=${TZ-UTC}

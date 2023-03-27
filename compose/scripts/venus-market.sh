@@ -6,6 +6,10 @@ echo "token:"
 echo ${token}
 
 
+if [[ -d ~/.venus ]];then
+    /app/venus-market run
+else
+
 /app/venus-market run \
 --node-url=/dns/node/tcp/3453  \
 --auth-url=http://auth:8989 \
@@ -26,3 +30,5 @@ pkill venus-market
 /compose/bin/toml set ~/.venusmarket/config.toml API.ListenAddress "/ip4/0.0.0.0/tcp/41235" > ~/.venusmarket/config.toml.tmp
 mv -f ~/.venusmarket/config.toml.tmp ~/.venusmarket/config.toml
 /app/venus-market run
+
+fi
