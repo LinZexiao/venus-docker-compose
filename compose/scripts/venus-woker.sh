@@ -1,4 +1,7 @@
-alias venus-worker=/app/venus-worker
+#!/bin/bash
+
+shopt -s expand_aliases
+alias venus-worker=/venus-worker
 
 if [[ -f /env/token ]];
 then
@@ -10,11 +13,13 @@ else
     echo "please create token file in /env/token"
 fi
 
-sed "s/<TOKEN>/$token/g" /compose/config/venus-worker.toml > /app/config.toml
+if [[ ! -f /config.toml ]]; then
+sed "s/<TOKEN>/$token/g" /compose/config/venus-worker.toml > /root/config.toml
 echo "venus-worker config:"
-cat /app/config.toml
+cat /root/config.toml
+fi
 
-if [[ ! -d /root/venus-worker-data/store/ ]]; then
+if [[ ! -d /root/data/store/store1 ]]; then
     venus-worker store sealing-init -l /root/data/store/store1
 fi
 
@@ -22,4 +27,4 @@ if [[ ! -d /root/data/pieces/ ]]; then
     mkdir /root/data/pieces/
 fi
 
-venus-worker daemon -c /app/config.toml
+venus-worker daemon -c /root/config.toml

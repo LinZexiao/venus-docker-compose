@@ -1,5 +1,5 @@
 [worker]
-name = "worker-#1"
+name = "worker1"
 # rpc_server.host = "192.168.1.100"
 # rpc_server.port = 17891
 

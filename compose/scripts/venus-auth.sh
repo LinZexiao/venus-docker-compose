@@ -11,11 +11,11 @@ if [ ! -f /env/token ]; then
     echo "regist admin"
     /app/venus-auth user add admin
     token=`/app/venus-auth token gen --perm admin admin`
+
+    echo "token: ${token#*: }"
+    echo "${token#*: }" > /env/token
     /app/venus-auth  user active admin
 
-    echo "token:"
-    echo ${token#*: }
-    echo "${token#*: }" > /env/token
 fi
 
 wait

@@ -135,7 +135,7 @@ services:
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-    entrypoint: "/script/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
+    entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
     # todo: rm it when worker can use hostname as host
     networks:
       default:
@@ -151,6 +151,8 @@ services:
       - ./.venus/root:/root
       - ./compose:/compose
     entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-woker.sh"
+    depends_on:
+      - vsm
 
   ssm:
     image: filvenus/venus-tool:latest
