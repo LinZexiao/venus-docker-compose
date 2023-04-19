@@ -150,7 +150,7 @@ services:
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-woker.sh"
+    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-worker.sh"
     depends_on:
       - vsm
 
