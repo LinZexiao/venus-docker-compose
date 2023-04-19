@@ -137,10 +137,6 @@ services:
       - ./.venus/root:/root
       - ./compose:/compose
     entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
-    # todo: rm it when worker can use hostname as host
-    networks:
-      default:
-        ipv4_address: 172.16.20.100
 
   worker:
     image: filvenus/venus-worker:latest
@@ -164,9 +160,3 @@ services:
       - ./.venus/root:/root
       - ./compose:/compose
     entrypoint: "/script/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-tool.sh"
-
-networks:
-  default:
-    ipam:
-      config:
-        - subnet: 172.16.20.0/24
