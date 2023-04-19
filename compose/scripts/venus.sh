@@ -5,8 +5,13 @@ if [[ -d ~/.venus ]];then
 else
 
 
+
 echo "Arg: $@"
 Args=" --auth-url=http://auth:8989 "
+
+sleep 20
+token=$(cat /env/token )
+Args="$Args --auth-token=$token"
 
 if [ $nettype ]
 then
@@ -41,6 +46,5 @@ jq '.api.apiAddress="/ip4/0.0.0.0/tcp/3453" ' ~/.venus/config.json | jq --arg bp
 mv -f ~/.venus/config.json.tmp ~/.venus/config.json 
 
 /app/venus daemon $Args
-
 
 fi
