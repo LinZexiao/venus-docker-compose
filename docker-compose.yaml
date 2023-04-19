@@ -132,6 +132,7 @@ services:
     environment:
       - TZ=${TZ-UTC}
     volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
