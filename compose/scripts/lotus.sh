@@ -1,4 +1,5 @@
 #! /usr/bin/bash
+set -e
 
 if [[ -d ~/.lotus ]]; then
     echo " repo ~/.lotus already exists"

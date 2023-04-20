@@ -1,10 +1,9 @@
 #!/bin/bash
+set -e
 
 if [[ -d ~/.venus ]];then
     /app/venus daemon
 else
-
-
 
 echo "Arg: $@"
 Args=" --auth-url=http://auth:8989 "

@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
 echo "Arg: $@"
 token=$(cat /env/token )

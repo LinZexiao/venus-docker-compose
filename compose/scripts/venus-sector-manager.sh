@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 shopt -s expand_aliases
 alias venus-sector-manager="/venus-sector-manager"

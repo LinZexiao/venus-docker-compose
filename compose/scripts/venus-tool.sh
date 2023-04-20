@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 Args="run "
 
 if [[ ! -d ~/.venustool ]]; then
