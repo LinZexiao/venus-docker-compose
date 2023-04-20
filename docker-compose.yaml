@@ -20,8 +20,6 @@ services:
 
   auth:
     image: filvenus/venus-auth:latest
-    ports:
-      - 8989:8989
     environment:
       - TZ=${TZ-UTC}
     volumes:
@@ -32,8 +30,6 @@ services:
 
   node:
     image: filvenus/venus:latest
-    ports:
-      - 3453:3453
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
@@ -58,8 +54,6 @@ services:
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-    ports:
-      - 45132:45132
 
     entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus-gateway.sh"
     depends_on:
@@ -67,8 +61,6 @@ services:
 
   messager:
     image: filvenus/venus-messager:latest
-    ports:
-      - 39812:39812
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -82,8 +74,6 @@ services:
 
   miner:
     image: filvenus/venus-miner:latest
-    ports:
-      - 12308:12308
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -100,8 +90,6 @@ services:
     image: filvenus/venus-market:latest
     environment:
       - TZ=${TZ-UTC}
-    ports:
-      - 41235:41235
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
