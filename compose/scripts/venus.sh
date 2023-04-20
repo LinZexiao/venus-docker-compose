@@ -5,13 +5,9 @@ if [[ -d ~/.venus ]];then
     /app/venus daemon
 else
 
-echo "Arg: $@"
 Args=" --auth-url=http://auth:8989 "
 
-while ture ; do
-    if [ -f /env/token ]; then
-        break
-    fi
+while [ ! -f /env/token ] ; do
     echo "wait token ..."
     sleep 5
 done

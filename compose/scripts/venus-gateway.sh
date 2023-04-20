@@ -1,13 +1,7 @@
 #!/bin/bash
 set -e
 
-sleep 15
-echo "Arg: $@"
-
-while ture ; do
-    if [ -f /env/token ]; then
-        break
-    fi
+while  [ ! -f /env/token ] ; do
     echo "wait token ..."
     sleep 5
 done
