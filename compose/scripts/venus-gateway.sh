@@ -2,6 +2,14 @@
 
 sleep 15
 echo "Arg: $@"
+
+while ture ; do
+    if [ -f /env/token ]; then
+        break
+    fi
+    echo "wait token ..."
+    sleep 5
+done
 token=$(cat /env/token )
 echo ${token}
 
