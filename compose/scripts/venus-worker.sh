@@ -12,6 +12,7 @@ then
 else
     echo "token not exists"
     echo "please create token file in /env/token"
+    exit 1
 fi
 
 if [[ ! -f /config.toml ]]; then
