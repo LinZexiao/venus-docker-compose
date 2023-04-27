@@ -130,6 +130,7 @@ services:
     image: 0x5459/venus-worker:v0.6.0-rc3
     environment:
       - TZ=${TZ-UTC}
+      - BELLMAN_NO_GPU=1
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
