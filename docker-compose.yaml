@@ -8,7 +8,7 @@
 version: '3'
 services:
   genesis:
-    image: tanlang/forcenet:nv19
+    image: tanlang/forcenet:nv18
     environment:
       - TZ=${TZ-UTC}
     volumes:
@@ -19,7 +19,7 @@ services:
     entrypoint: "/compose/scripts/genesis.sh"
 
   auth:
-    image: filvenus/venus-auth:latest
+    image: filvenus/venus-auth:v1.10.1
     environment:
       - TZ=${TZ-UTC}
     volumes:
@@ -29,7 +29,7 @@ services:
     entrypoint: "/compose/scripts/venus-auth.sh"
 
   node:
-    image: filvenus/venus:v1.11.1
+    image: filvenus/venus:v1.10.1
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
@@ -47,7 +47,7 @@ services:
       - auth
 
   gateway:
-    image: filvenus/venus-gateway:latest
+    image: filvenus/venus-gateway:v1.10.1
     environment:
       - TZ=${TZ-UTC}
     volumes:
@@ -60,7 +60,7 @@ services:
       - auth
 
   messager:
-    image: filvenus/venus-messager:latest
+    image: filvenus/venus-messager:v1.10.1
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -73,7 +73,7 @@ services:
       - gateway
 
   miner:
-    image: filvenus/venus-miner:latest
+    image: filvenus/venus-miner:v1.10.0
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -87,7 +87,7 @@ services:
       - gateway
 
   market:
-    image: filvenus/venus-market:latest
+    image: filvenus/venus-market:v2.6.0
     environment:
       - TZ=${TZ-UTC}
     volumes:
@@ -102,7 +102,7 @@ services:
       - gateway
 
   wallet:
-    image: filvenus/venus-wallet:latest
+    image: filvenus/venus-wallet:v1.10.1
     environment:
       - TZ=${TZ-UTC}
       - nettype=${nettype-butterfly}
@@ -127,7 +127,7 @@ services:
     entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
 
   worker:
-    image: 0x5459/venus-worker:v0.6.0-rc3
+    image: filvenus/venus-worker:latest
     environment:
       - TZ=${TZ-UTC}
       - BELLMAN_NO_GPU=1
