@@ -1,28 +1,28 @@
 services:=ssm vsm wallet market miner messager gateway node auth
+
+DC?=docker compose
+
 down:
-	docker-compose down
+	$(DC) down
 	# docker-compose stop ${services}
 	# docker-compose rm ${services}
 d: down
 
 up:
-	docker-compose up -d
+	$(DC) up -d
 u: up
 
 stop:
-	docker-compose stop ${services}
+	$(DC) stop ${services}
 s: stop
 
 clean: down
 	rm -rf .venus/root/.venus*
 
 genesis:
-	docker-compose start genesis
+	$(DC) start genesis
 
 clean-all:
-	docker-compose stop
-	docker-compose rm -f
+	$(DC) stop
+	$(DC) rm -f
 	rm -rf .venus
-
-start:
-	docker-compose up -d
