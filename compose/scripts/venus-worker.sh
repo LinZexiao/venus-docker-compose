@@ -27,11 +27,11 @@ if [[ ! -d /data/store/store1 ]]; then
 fi
 
 if [[ ! -d /data/store/store2 ]]; then
-    venus-worker store sealing-init -l /data/store/store1
+    venus-worker store sealing-init -l /data/store/store2
 fi
 
 if [[ ! -d /data/store/store3 ]]; then
-    venus-worker store sealing-init -l /data/store/store1
+    venus-worker store sealing-init -l /data/store/store3
 fi
 
 if [[ ! -d /data/pieces/ ]]; then
