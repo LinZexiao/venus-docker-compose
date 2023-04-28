@@ -4,6 +4,11 @@ set -e
 shopt -s expand_aliases
 alias venus-worker=/venus-worker
 
+if [[ -z $WORKER_NAME ]]; then
+    echo "WORKER_NAME not set"
+    exit 1
+fi
+
 if [[ -f /env/token ]];
 then
     echo "token exists"
@@ -16,26 +21,25 @@ else
 fi
 
 if [[ ! -f /config.toml ]]; then
-sed "s/<TOKEN>/$token/g" /compose/config/venus-worker.toml > /root/config.toml
-echo "venus-worker config:"
-cat /root/config.toml
+sed "s/<TOKEN>/$token/g" /compose/config/venus-worker.toml > /tmp/worker.toml
+sed "s/<WORKER_NAME>/$WORKER_NAME/g" /tmp/worker.toml > /root/$WORKER_NAME.toml
 fi
 
 
-if [[ ! -d /data/store/store1 ]]; then
-    venus-worker store sealing-init -l /data/store/store1
+if [[ ! -d /data/$WORKER_NAME/store/store1 ]]; then
+    venus-worker store sealing-init -l /data/$WORKER_NAME/store/store1
 fi
 
-if [[ ! -d /data/store/store2 ]]; then
-    venus-worker store sealing-init -l /data/store/store2
+if [[ ! -d /data/$WORKER_NAME/store/store2 ]]; then
+    venus-worker store sealing-init -l /data/$WORKER_NAME/store/store2
 fi
 
-if [[ ! -d /data/store/store3 ]]; then
-    venus-worker store sealing-init -l /data/store/store3
+if [[ ! -d /data/$WORKER_NAME/store/store3 ]]; then
+    venus-worker store sealing-init -l /data/$WORKER_NAME/store/store3
 fi
 
 if [[ ! -d /data/pieces/ ]]; then
     mkdir /data/pieces/
 fi
 
-venus-worker daemon -c /root/config.toml
+venus-worker daemon -c /root/$WORKER_NAME.toml

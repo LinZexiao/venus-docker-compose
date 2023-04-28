@@ -1,5 +1,5 @@
 [worker]
-name = "worker1"
+name = "<WORKER_NAME>"
 # rpc_server.host = "192.168.1.100"
 # rpc_server.port = 17891
 
@@ -14,15 +14,15 @@ enable_deals = true
 max_retries = 3
 
 [[sealing_thread]]
-location = "/data/store/store1"
+location = "/data/<WORKER_NAME>/store/store1"
 
 
 [[sealing_thread]]
-location = "/data/store/store2"
+location = "/data/<WORKER_NAME>/store/store2"
 
 
 [[sealing_thread]]
-location = "/data/store/store3"
+location = "/data/<WORKER_NAME>/store/store3"
 
 
 [[attached]]

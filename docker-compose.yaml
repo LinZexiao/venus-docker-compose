@@ -133,11 +133,12 @@ services:
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
+      - WORKER_NAME=worker1
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
-      - ./.venus/data/woker1:/data
+      - ./.venus/data:/data
       - ./compose:/compose
     entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-worker.sh"
     depends_on:
