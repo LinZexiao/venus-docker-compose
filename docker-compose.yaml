@@ -144,6 +144,23 @@ services:
     depends_on:
       - vsm
 
+  worker2:
+    image: 0x5459/venus-worker:v0.6.0-rc3
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+      - BELLMAN_NO_GPU=1
+      # WORKER_NAME should be change for a new worker
+      - WORKER_NAME=worker2
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./.venus/data:/data
+      - ./compose:/compose
+    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-worker.sh"
+    depends_on:
+      - vsm
+
   ssm:
     image: filvenus/venus-tool:latest
     environment:
