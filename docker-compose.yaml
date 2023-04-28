@@ -93,6 +93,7 @@ services:
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
+      - ./.venus/data:/data
       - ./compose:/compose
 
     entrypoint: "/script/wait-for-it.sh messager:39812 -t 0  -- /compose/scripts/venus-market.sh"
@@ -123,10 +124,11 @@ services:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
+      - ./.venus/data:/data
       - ./compose:/compose
     entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
 
-  worker:
+  worker1:
     image: 0x5459/venus-worker:v0.6.0-rc3
     environment:
       - TZ=${TZ-Asia/Shanghai}
@@ -135,6 +137,7 @@ services:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
+      - ./.venus/data/woker1:/data
       - ./compose:/compose
     entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-worker.sh"
     depends_on:

@@ -22,20 +22,20 @@ cat /root/config.toml
 fi
 
 
-if [[ ! -d /root/data/store/store1 ]]; then
-    venus-worker store sealing-init -l /root/data/store/store1
+if [[ ! -d /data/store/store1 ]]; then
+    venus-worker store sealing-init -l /data/store/store1
 fi
 
-if [[ ! -d /root/data/store/store2 ]]; then
-    venus-worker store sealing-init -l /root/data/store/store1
+if [[ ! -d /data/store/store2 ]]; then
+    venus-worker store sealing-init -l /data/store/store1
 fi
 
-if [[ ! -d /root/data/store/store3 ]]; then
-    venus-worker store sealing-init -l /root/data/store/store1
+if [[ ! -d /data/store/store3 ]]; then
+    venus-worker store sealing-init -l /data/store/store1
 fi
 
-if [[ ! -d /root/data/pieces/ ]]; then
-    mkdir /root/data/pieces/
+if [[ ! -d /data/pieces/ ]]; then
+    mkdir /data/pieces/
 fi
 
 venus-worker daemon -c /root/config.toml

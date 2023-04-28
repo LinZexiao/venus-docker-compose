@@ -51,8 +51,8 @@ else
     echo $miner > /env/miner
 fi
 
-if [[ ! -d /root/data/pieces/ ]]; then
-    mkdir /root/data/pieces/
+if [[ ! -d /data/pieces/ ]]; then
+    mkdir /data/pieces/
 fi
 
 # wait for node warm up

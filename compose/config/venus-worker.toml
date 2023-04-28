@@ -14,19 +14,19 @@ enable_deals = true
 max_retries = 3
 
 [[sealing_thread]]
-location = "/root/data/store/store1"
+location = "/data/store/store1"
 
 
 [[sealing_thread]]
-location = "/root/data/store/store2"
+location = "/data/store/store2"
 
 
 [[sealing_thread]]
-location = "/root/data/store/store3"
+location = "/data/store/store3"
 
 
 [[attached]]
 name = "persist-store"
-location = "/root/data/pieces/"
+location = "/data/pieces/"
 
 [processors.limitation.concurrent]

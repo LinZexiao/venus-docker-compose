@@ -25,7 +25,7 @@ else
     exist=$(/app/venus-market  piece-storage list | grep DefaultPieceStorage )
     if [ -z "$exist" ]; then
         echo "add piece storage"
-        /app/venus-market piece-storage add-fs --name DefaultPieceStorage --path /root/data/pieces
+        /app/venus-market piece-storage add-fs --name DefaultPieceStorage --path /data/pieces
     fi
 
     wait
