@@ -10,7 +10,7 @@ services:
   genesis:
     image: tanlang/forcenet:nv19
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
@@ -21,7 +21,7 @@ services:
   auth:
     image: filvenus/venus-auth:latest
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -39,7 +39,7 @@ services:
       - GOLOG_LOG_LEVEL=debug
       - HTTPS_PROXY=${proxy}
       - nettype=${nettype-force}
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
       - snapshot=${snapshot}
       - genesisfile=${genesisfile}
     entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus.sh"
@@ -49,7 +49,7 @@ services:
   gateway:
     image: filvenus/venus-gateway:latest
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -66,7 +66,7 @@ services:
       - ./.venus/root:/root
       - ./compose:/compose
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-messager.sh"
     depends_on:
       - auth
@@ -80,7 +80,7 @@ services:
       - ./compose:/compose
     environment:
       - nettype=${nettype-butterfly}
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-miner.sh"
     depends_on:
       - auth
@@ -89,7 +89,7 @@ services:
   market:
     image: filvenus/venus-market:latest
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -104,7 +104,7 @@ services:
   wallet:
     image: filvenus/venus-wallet:latest
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
       - nettype=${nettype-butterfly}
     volumes:
       - ./.venus/env:/env
@@ -118,7 +118,7 @@ services:
   vsm:
     image: filvenus/venus-sector-manager:latest
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
@@ -129,7 +129,7 @@ services:
   worker:
     image: 0x5459/venus-worker:v0.6.0-rc3
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
@@ -143,7 +143,7 @@ services:
   ssm:
     image: filvenus/venus-tool:latest
     environment:
-      - TZ=${TZ-UTC}
+      - TZ=${TZ-Asia/Shanghai}
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
