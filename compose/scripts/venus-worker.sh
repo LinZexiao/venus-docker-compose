@@ -26,6 +26,14 @@ if [[ ! -d /root/data/store/store1 ]]; then
     venus-worker store sealing-init -l /root/data/store/store1
 fi
 
+if [[ ! -d /root/data/store/store2 ]]; then
+    venus-worker store sealing-init -l /root/data/store/store1
+fi
+
+if [[ ! -d /root/data/store/store3 ]]; then
+    venus-worker store sealing-init -l /root/data/store/store1
+fi
+
 if [[ ! -d /root/data/pieces/ ]]; then
     mkdir /root/data/pieces/
 fi
