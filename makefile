@@ -24,7 +24,7 @@ clean: down
 	rm -rf .venus/root/.venus*
 
 genesis:
-	$(DC) start genesis
+	$(DC) up genesis
 
 clean-all:
 	$(DC) stop
