@@ -17,6 +17,7 @@ services:
       - ./.venus/root:/root
       - ./compose:/compose
     entrypoint: "/compose/scripts/genesis.sh"
+    network_mode: "host"
 
   auth:
     image: filvenus/venus-auth:latest
