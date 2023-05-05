@@ -3,7 +3,7 @@ set -e
 
 if [[ -d ~/.lotus ]]; then
     echo " repo ~/.lotus already exists"
-    ./lotus daemon --api=5651 &
+    ./lotus daemon  &
     sleep 15
     ./lotus-miner run --nosync
 else
@@ -18,7 +18,7 @@ else
     ./lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
 
     # lotus daemon
-    ./lotus daemon --lotus-make-genesis=/root/genesis.car --genesis-template=localnet.json --bootstrap=false --api=5651 &
+    ./lotus daemon --lotus-make-genesis=/root/genesis.car --genesis-template=localnet.json --bootstrap=false  &
 
     # echo bootstrap
     if [ -f /env/bootstrap ];then
