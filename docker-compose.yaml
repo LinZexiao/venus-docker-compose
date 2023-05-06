@@ -147,6 +147,7 @@ services:
 
   worker2:
     image: 0x5459/venus-worker:v0.6.0-rc3
+    network_mode: "host"
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
