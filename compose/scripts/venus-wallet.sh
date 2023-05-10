@@ -10,7 +10,6 @@ else
     echo $PSWD > /env/wallet_pswd
 fi
 
-
 token=$(cat /env/token )
 
 Args=""
@@ -20,6 +19,18 @@ then
 fi
 
 Args="$Args run --password=$PSWD --gateway-api=/dns/gateway/tcp/45132 --gateway-token=$token --support-accounts=admin"
+
+# check if /root/.venus_wallet/ exists
+if [[ ! -d /root/.venus_wallet ]]; then
+    echo "not found ~/.venus_wallet, init it"
+    
+    # set api
+    ./venus-wallet $Args &
+    sleep 1
+    pkill venus-wallet
+    /compose/bin/toml set /root/.venus_wallet/config.toml API.ListenAddress  /ip4/0.0.0.0/tcp/5678/http > /root/.venus_wallet/config.toml.tmp
+    mv -f /root/.venus_wallet/config.toml.tmp /root/.venus_wallet/config.toml
+fi
 
 
 echo "EXEC: ./venus-wallet $Args \n\n"
