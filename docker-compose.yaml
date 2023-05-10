@@ -11,7 +11,7 @@ services:
     image: tanlang/forcenet:nv19
     environment:
       - TZ=${TZ-Asia/Shanghai}
-      - LOTUS_API_LISTENADDRESS=/ip4/0.0.0.0/tcp/1234/http
+      # - LOTUS_API_LISTENADDRESS=/ip4/0.0.0.0/tcp/1234/http
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
@@ -121,6 +121,7 @@ services:
     image: filvenus/venus-sector-manager:latest
     environment:
       - TZ=${TZ-Asia/Shanghai}
+      - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
