@@ -117,11 +117,25 @@ services:
       - gateway
     entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-wallet.sh"
 
+  client:
+    image: filvenus/market-client:v2.7.1
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./.venus/data:/data
+      - ./compose:/compose
+
+    entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/market-client.sh"
+    depends_on:
+      - wallet
+
   vsm:
     image: filvenus/venus-sector-manager:latest
     environment:
       - TZ=${TZ-Asia/Shanghai}
-      - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
+      # - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
