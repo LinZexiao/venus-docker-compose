@@ -1,8 +1,14 @@
 #!/bin/bash
 set -e
 
+# make alias work
 shopt -s expand_aliases
-alias venus-worker=/venus-worker
+
+# check VENUS_WORKER_BIN is set
+if [[ -z $VENUS_WORKER_BIN ]]; then
+    VENUS_WORKER_BIN=/venus-worker
+fi
+alias venus-worker=$VENUS_WORKER_BIN
 
 if [[ -z $WORKER_NAME ]]; then
     echo "WORKER_NAME not set"

@@ -1,8 +1,16 @@
 #!/bin/bash
 set -e
 
+
+# make alias work
 shopt -s expand_aliases
-alias venus-sector-manager="/venus-sector-manager"
+
+# check VENUS_WORKER_BIN is set
+if [[ -z $VENUS_SECTOR_MANAGER_BIN ]]; then
+    VENUS_SECTOR_MANAGER_BIN=/venus-sector-manager
+fi
+alias venus-sector-manager=$VENUS_SECTOR_MANAGER_BIN
+
 
 if [[ -f /env/token ]];
 then
