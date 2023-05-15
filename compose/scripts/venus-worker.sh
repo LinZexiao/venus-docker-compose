@@ -26,7 +26,7 @@ else
     exit 1
 fi
 
-if [[ ! -f /config.toml ]]; then
+if [[ ! -f /root/$WORKER_NAME.toml ]]; then
 sed "s/<TOKEN>/$token/g" /compose/config/venus-worker.toml > /tmp/worker.toml
 sed "s/<WORKER_NAME>/$WORKER_NAME/g" /tmp/worker.toml > /root/$WORKER_NAME.toml
 fi
