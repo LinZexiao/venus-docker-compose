@@ -3,6 +3,8 @@ name = "<WORKER_NAME>"
 # rpc_server.host = "192.168.1.100"
 # rpc_server.port = 17891
 
+local_pieces_dir = '/data/pieces/'
+
 # [metrics]
 
 [sector_manager]
@@ -27,6 +29,6 @@ location = "/data/<WORKER_NAME>/store/store3"
 
 [[attached]]
 name = "persist-store"
-location = "/data/pieces/"
+location = "/data/persist/"
 
 [processors.limitation.concurrent]
