@@ -42,5 +42,7 @@ else
         venus-market piece-storage add-fs --name DefaultPieceStorage --path /data/pieces
     fi
 
-    wait
+    #  todo : upsert miner , set peerid , set ask , set publish period
 fi
+
+wait

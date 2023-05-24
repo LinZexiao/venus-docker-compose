@@ -2,12 +2,17 @@
 set -e
 
 token=$(cat /env/token )
-echo "token:"
-echo ${token}
+echo "token:${token}"
 
+
+
+sleep 15
 wallet_api=$(cat /env/wallet_api )
-WALLET_TOKEN=$(echo "$wallet_api" | sed 's/.*[:]\(.*\)/\1/')  
+WALLET_TOKEN=$(echo "$wallet_api" | sed 's/:.*//' )  
 WALLET_URL=$(echo "$wallet_api" | sed 's/.*:\(.*\)/\1/')
+
+WALLET_ADDR=$(cat /env/wallet_address)
+echo "wallet_addr:${WALLET_ADDR}"
 
 Args="run "
 if [[ -d ~/.marketclient ]];then
@@ -18,8 +23,9 @@ else
     Args="$Args --node-url=/dns/node/tcp/3453"
     Args="$Args --messager-url=/dns/messager/tcp/39812/"
     Args="$Args --signer-type=wallet"
-    Args="$Args --signer-url=$WALLET_URL"
+    Args="$Args --signer-url=http://wallet:5678"
     Args="$Args --signer-token=$WALLET_TOKEN"
+    Args="$Args --addr=$WALLET_ADDR"
 fi
 
 echo "EXEC: /app/market-client $Args \n\n"

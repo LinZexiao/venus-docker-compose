@@ -3,6 +3,7 @@ set -e
 
 Args="run "
 
+sleep 30
 if [[ ! -d ~/.venustool ]]; then
 token=$(cat /env/token )
 wallet_api=$(cat /env/wallet_api )

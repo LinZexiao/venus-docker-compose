@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "Arg: $@"
-
 PSWD=$(head -n 10 /dev/urandom | md5sum | head -c 20)
 if [[ -f /env/wallet_pswd ]]; then
     PSWD=$(cat /env/wallet_pswd)
@@ -37,6 +35,13 @@ echo "EXEC: ./venus-wallet $Args \n\n"
 ./venus-wallet $Args &
 
 sleep 3
+# output wallet api
+if [[ ! -f /env/wallet_api ]];then
+wallet_api=$(venus-wallet auth api-info --perm admin)
+echo "wallet_api: $wallet_api"
+echo $wallet_api > /env/wallet_api
+fi
+
 addr_exist=$( venus-wallet list )
 if [ -z "$addr_exist" ]
 then
@@ -53,10 +58,6 @@ then
     echo $ADDR > /env/wallet_address
 fi
 
-if [[ ! -f /env/wallet_api ]];then
-wallet_api=$(venus-wallet auth api-info --perm admin)
-echo "wallet_api: $wallet_api"
-echo $wallet_api > /env/wallet_api
-fi
+
 
 wait
