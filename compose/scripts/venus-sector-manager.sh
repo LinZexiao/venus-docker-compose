@@ -5,11 +5,15 @@ set -e
 # make alias work
 shopt -s expand_aliases
 
+alias venus-sector-manager=/venus-sector-manager
 # check VENUS_WORKER_BIN is set
-if [[ -z $VENUS_SECTOR_MANAGER_BIN ]]; then
-    VENUS_SECTOR_MANAGER_BIN=/venus-sector-manager
+if [[ ! -z $VENUS_SECTOR_MANAGER_BIN ]]; then
+    if [[ ! -f $VENUS_SECTOR_MANAGER_BIN ]]; then
+        echo "$VENUS_SECTOR_MANAGER_BIN not exists"
+    else
+        alias venus-sector-manager=$VENUS_SECTOR_MANAGER_BIN
+    fi
 fi
-alias venus-sector-manager=$VENUS_SECTOR_MANAGER_BIN
 
 venus-sector-manager --version
 
@@ -62,6 +66,10 @@ fi
 
 if [[ ! -d /data/pieces/ ]]; then
     mkdir /data/pieces/
+fi
+
+if [[ ! -d /data/persist/ ]]; then
+    mkdir /data/persist/
 fi
 
 # wait for node warm up
