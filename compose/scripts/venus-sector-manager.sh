@@ -11,6 +11,7 @@ if [[ -z $VENUS_SECTOR_MANAGER_BIN ]]; then
 fi
 alias venus-sector-manager=$VENUS_SECTOR_MANAGER_BIN
 
+venus-sector-manager --version
 
 if [[ -f /env/token ]];
 then

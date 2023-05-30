@@ -12,10 +12,6 @@ down:
 	# docker-compose rm ${services}
 d: down
 
-up:
-	$(DC) up -d
-u: up
-
 stop:
 	$(DC) stop ${services}
 s: stop

@@ -1,13 +1,27 @@
 #!/bin/bash
 # set -e
 
+# make alias work
+shopt -s expand_aliases
+
 token=$(cat /env/token )
 echo "token:"
 echo ${token}
 
+alias venus-market=/app/venus-market
+# check MARKET_BIN is set
+if [[ ! -z $MARKET_BIN ]]; then
+    if [[ ! -f $MARKET_BIN ]]; then
+        echo "$MARKET_BIN not exists"
+    else
+        alias venus-market=$MARKET_BIN
+    fi
+fi
+venus-market --version
+
 
 if [[ -d ~/.venusmarket ]];then
-    /app/venus-market run
+    venus-market run &
 else
     Args="run "
     Args="$Args --auth-url=http://auth:8989"
@@ -18,14 +32,14 @@ else
     Args="$Args --messager-url=/dns/messager/tcp/39812/"
     Args="$Args --cs-token=${token}"
     Args="$Args --signer-type=gateway"
-    echo "EXEC: /app/venus-market $Args \n\n"
-    /app/venus-market $Args &
+    echo "EXEC: venus-market $Args \n\n"
+    venus-market $Args &
 
     sleep 30
-    exist=$(/app/venus-market  piece-storage list | grep DefaultPieceStorage )
+    exist=$(venus-market  piece-storage list | grep DefaultPieceStorage )
     if [ -z "$exist" ]; then
         echo "add piece storage"
-        /app/venus-market piece-storage add-fs --name DefaultPieceStorage --path /data/pieces
+        venus-market piece-storage add-fs --name DefaultPieceStorage --path /data/pieces
     fi
 
     wait

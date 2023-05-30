@@ -8,7 +8,9 @@ shopt -s expand_aliases
 if [[ -z $VENUS_WORKER_BIN ]]; then
     VENUS_WORKER_BIN=/venus-worker
 fi
+
 alias venus-worker=$VENUS_WORKER_BIN
+venus-worker --version
 
 if [[ -z $WORKER_NAME ]]; then
     echo "WORKER_NAME not set"
