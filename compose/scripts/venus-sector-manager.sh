@@ -74,4 +74,4 @@ fi
 
 # wait for node warm up
 sleep 30
-venus-sector-manager daemon run --poster
+venus-sector-manager daemon run --poster --miner
