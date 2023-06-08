@@ -14,7 +14,6 @@ if [[ ! -z $VENUS_WORKER_BIN ]]; then
     fi
 fi
 
-alias venus-worker=$VENUS_WORKER_BIN
 venus-worker --version
 
 if [[ -z $WORKER_NAME ]]; then
