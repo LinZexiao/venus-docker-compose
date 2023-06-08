@@ -1,0 +1,16 @@
+# normally, genesis service is only used in test network, so the default image is for forcenet
+
+version: '3'
+services:
+  genesis:
+    image: tanlang/${NET_TYPE-2k}:nv19
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    env_file:
+      - ./chain.env
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts/genesis.sh"

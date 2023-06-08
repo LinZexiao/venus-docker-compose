@@ -1,0 +1,84 @@
+version: '3'
+services:
+  auth:
+    image: filvenus/venus-auth:latest
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts/venus-auth.sh"
+
+  node:
+    image: filvenus/venus:v1.11.1
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+      - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
+      - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
+    environment:
+      - HTTPS_PROXY=${proxy}
+      - TZ=${TZ-Asia/Shanghai}
+    env_file:
+      - ./chain.env
+    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus.sh"
+    depends_on:
+      - auth
+
+  gateway:
+    image: filvenus/venus-gateway:latest
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+
+    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus-gateway.sh"
+    depends_on:
+      - auth
+
+  messager:
+    image: filvenus/venus-messager:latest
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-messager.sh"
+    depends_on:
+      - auth
+      - gateway
+
+  miner:
+    image: filvenus/venus-miner:latest
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-miner.sh"
+    depends_on:
+      - auth
+      - gateway
+
+  market:
+    image: filvenus/venus-market:latest
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./.venus/data:/data
+      - ./compose:/compose
+
+    entrypoint: "/script/wait-for-it.sh messager:39812 -t 0  -- /compose/scripts/venus-market.sh"
+    depends_on:
+      - auth
+      - node
+      - gateway

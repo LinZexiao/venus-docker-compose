@@ -14,7 +14,7 @@ else
 
     # seed
     ./lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
-    ./lotus-seed genesis new --network-name forcenet localnet.json
+    ./lotus-seed genesis new --network-name $NET_TYPE localnet.json
     ./lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
 
     # lotus daemon

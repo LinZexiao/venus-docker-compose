@@ -5,47 +5,52 @@ if [[ -d ~/.venus ]];then
     /app/venus daemon
 else
 
-Args=" --auth-url=http://auth:8989 "
+    Args=" --auth-url=http://auth:8989 "
 
-while [ ! -f /env/token ] ; do
-    echo "wait token ..."
-    sleep 5
-done
-token=$(cat /env/token )
-Args="$Args --auth-token=$token"
+    while [ ! -f /env/token ] ; do
+        echo "wait token ..."
+        sleep 5
+    done
+    token=$(cat /env/token )
+    Args="$Args --auth-token=$token"
 
-if [ $nettype ]
-then
-    Args="$Args --network=$nettype"
-fi
+    if [ ! -z $NET_TYPE ]
+    then
+        Args="$Args --network=$NET_TYPE"
+    fi
 
-if [ $snapshot ]
-then
-    Args="$Args --import-snapshot=~/snapshot.car"
-fi
+    if [ ! -z $SNAP_SHOT ]
+    then
+        Args="$Args --import-snapshot=/root/snapshot.car"
+    fi
 
-Args="$Args --genesisfile=/root/genesis.car"
+    if [ -z $SNAP_SHOT  ] && [ ! -z $GEN_FILE ] 
+    then
+        Args="$Args --genesisfile=/root/genesis.car"
+    fi
 
-# wait genesis
-sleep 30
+    # if not mainnet,calibrationnet,butterflynet, wait for bootstrap
+    if [ ! -z $NET_TYPE ] && [ $NET_TYPE != "mainnet" ] && [ $NET_TYPE != "calibrationnet" ] && [ $NET_TYPE != "butterflynet" ]
+    then
+        while [ ! -f /env/bootstrap ] ; do
+            echo "wait bootstrap ..."
+            sleep 5
+        done
+        bootstraper=$(cat /env/bootstrap )
+        Args="$Args --bootstrap-peers=$bootstraper"
+    fi
 
-echo "EXEC: /app/venus daemon $Args \n\n"
-/app/venus daemon $Args &
 
-echo "wait to restart ..."
-sleep 20
-echo "restart ..."
-if [ -f /env/bootstrap ];
-then
-    bootstraper=$(cat /env/bootstrap )
-    /app/venus swarm connect $bootstraper
-    echo "connect to $bootstraper"
-fi
+    echo "EXEC: /app/venus daemon $Args \n\n"
+    /app/venus daemon $Args &
 
-pkill venus
-jq '.api.apiAddress="/ip4/0.0.0.0/tcp/3453" ' ~/.venus/config.json | jq --arg bp $bootstraper '.bootstrap.addresses +=[ $bp ]' > ~/.venus/config.json.tmp
-mv -f ~/.venus/config.json.tmp ~/.venus/config.json 
+    # restart to change api
+    echo "wait to restart ..."
+    sleep 20
+    echo "restart ..."
+    pkill venus
+    jq '.api.apiAddress="/ip4/0.0.0.0/tcp/3453" ' ~/.venus/config.json > ~/.venus/config.json.tmp
+    mv -f ~/.venus/config.json.tmp ~/.venus/config.json 
 
-/app/venus daemon $Args
-
+    /app/venus daemon $Args
 fi

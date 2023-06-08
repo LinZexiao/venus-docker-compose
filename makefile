@@ -1,40 +1,30 @@
 services:=ssm vsm wallet market miner messager gateway node auth
 
-DC?=docker compose
+DC_CHAIN?=docker compose  --env-file chain.env -f compose.chain.yml
+DC_CLUSTER?=docker compose  -f compose.cluster.yml
+DC_GENESIS?=docker compose --env-file chain.env  -f compose.genesis.yml
 
-up:
-	$(DC) up -d
-u: up
+DC_ALL?=docker compose  --env-file chain.env -f compose.chain.yml -f compose.cluster.yml -f compose.genesis.yml
 
-down:
-	$(DC) down
-	# docker-compose stop ${services}
-	# docker-compose rm ${services}
-d: down
 
-stop:
-	$(DC) stop ${services}
-s: stop
-
-clean: down
-	rm -rf .venus/root/.venus*
+chain:
+	$(DC_CHAIN) up -d
 
 genesis:
-	$(DC) up -d genesis
+	$(DC_GENESIS) up -d
+
+genesis_d:
+	$(DC_GENESIS) stop
+	$(DC_GENESIS) rm
+
+cluster:
+	$(DC_CLUSTER) up wallet
+	sleep 5
+	$(DC_CLUSTER) up -d
+
+test:
+	$(DC_ALL) up -d
 
 clean-all:
-	$(DC) stop
-	$(DC) rm -f
+	$(DC_ALL) down
 	rm -rf .venus
-
-# log for all services
-l_chain:
-	$(DC) logs -f ${services}
-
-# log for all services
-l_cluster:
-	$(DC) logs -f vsm worker
-
-extract:
-	nohup $(DC) logs -f vsm > vsm.log &
-	nohup $(DC) logs -f worker > worker.log &
