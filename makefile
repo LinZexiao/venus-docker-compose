@@ -10,12 +10,22 @@ DC_ALL?=docker compose  --env-file chain.env -f compose.chain.yml -f compose.clu
 chain:
 	$(DC_CHAIN) up -d
 
+chain_c:
+	$(DC_CHAIN) stop
+	$(DC_CHAIN) rm -f 
+	rm .venus/root/.venus
+
+node_c:
+	$(DC_CHAIN) stop node
+	$(DC_CHAIN) rm -f node 
+	rm .venus/root/.venus
+
 genesis:
 	$(DC_GENESIS) up -d
 
 genesis_d:
 	$(DC_GENESIS) stop
-	$(DC_GENESIS) rm
+	$(DC_GENESIS) rm -f
 
 cluster: cluster_pre
 	$(DC_CLUSTER) up -d
