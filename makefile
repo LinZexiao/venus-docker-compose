@@ -18,7 +18,7 @@ genesis_d:
 	$(DC_GENESIS) rm
 
 cluster:
-	$(DC_CLUSTER) up wallet
+	$(DC_CLUSTER) up -d wallet
 	sleep 5
 	$(DC_CLUSTER) up -d
 
