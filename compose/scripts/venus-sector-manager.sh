@@ -4,7 +4,6 @@ set -e
 
 # make alias work
 shopt -s expand_aliases
-
 alias venus-sector-manager=/venus-sector-manager
 # check VENUS_WORKER_BIN is set
 if [[ ! -z $VENUS_SECTOR_MANAGER_BIN ]]; then
