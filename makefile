@@ -10,6 +10,10 @@ DC_ALL?=docker compose  --env-file chain.env -f compose.chain.yml -f compose.clu
 chain:
 	$(DC_CHAIN) up -d
 
+chain_d:
+	$(DC_CHAIN) stop
+	$(DC_CHAIN) rm
+
 genesis:
 	$(DC_GENESIS) up -d
 
