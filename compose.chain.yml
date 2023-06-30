@@ -1,7 +1,7 @@
 version: '3'
 services:
   auth:
-    image: filvenus/venus-auth:latest
+    image: filvenus/venus-auth:v1.11.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -29,7 +29,7 @@ services:
       - auth
 
   gateway:
-    image: filvenus/venus-gateway:latest
+    image: filvenus/venus-gateway:v1.11.1
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -42,7 +42,7 @@ services:
       - auth
 
   messager:
-    image: filvenus/venus-messager:latest
+    image: filvenus/venus-messager:v1.11.0
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -55,7 +55,7 @@ services:
       - gateway
 
   miner:
-    image: filvenus/venus-miner:latest
+    image: filvenus/venus-miner:v1.11.0
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -68,7 +68,7 @@ services:
       - gateway
 
   market:
-    image: filvenus/venus-market:latest
+    image: filvenus/venus-market:v2.7.1
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
