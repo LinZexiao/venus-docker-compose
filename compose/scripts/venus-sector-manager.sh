@@ -6,11 +6,11 @@ set -e
 shopt -s expand_aliases
 alias venus-sector-manager=/venus-sector-manager
 # check VENUS_WORKER_BIN is set
-if [[ ! -z $VENUS_SECTOR_MANAGER_BIN ]]; then
-    if [[ ! -f $VENUS_SECTOR_MANAGER_BIN ]]; then
-        echo "$VENUS_SECTOR_MANAGER_BIN not exists"
+if [[ ! -z $MANAGER_BIN ]]; then
+    if [[ ! -f $MANAGER_BIN ]]; then
+        echo "$MANAGER_BIN not exists"
     else
-        alias venus-sector-manager=$VENUS_SECTOR_MANAGER_BIN
+        alias venus-sector-manager=$MANAGER_BIN
     fi
 fi
 
@@ -67,7 +67,7 @@ if [[ ! -d /data/pieces/ ]]; then
     mkdir /data/pieces/
 fi
 
-if [[ ! -d /data/persist/ ]]; then
+if [[ ! -d /data/persist/ ]];
     mkdir /data/persist/
 fi
 

@@ -20,6 +20,9 @@ This repository contains the docker-compose files to run a full Venus serial sof
 - `make genesis` to launch up a genesis node
 - `make cluster` to launch up venus-cluster to start sealing
 
+some preset needed:
+- add miner to user in auth
+
 
 ## Addition
 

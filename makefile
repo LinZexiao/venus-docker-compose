@@ -17,9 +17,7 @@ genesis_d:
 	$(DC_GENESIS) stop
 	$(DC_GENESIS) rm
 
-cluster:
-	$(DC_CLUSTER) up -d wallet
-	sleep 5
+cluster: cluster_pre
 	$(DC_CLUSTER) up -d
 
 test:
@@ -28,3 +26,9 @@ test:
 clean-all:
 	$(DC_ALL) down
 	rm -rf .venus
+
+
+cluster_pre:
+	$(DC_CHAIN) exec auth /app/sophon-auth user miner add admin t01002
+	$(DC_CLUSTER) up -d wallet
+	sleep 5

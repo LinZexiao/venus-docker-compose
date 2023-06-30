@@ -1,5 +1,19 @@
 #!/bin/bash
 set -e
+# make alias work
+shopt -s expand_aliases
+
+alias auth=/app/sophon-auth
+# check AUTH_BIN is set
+if [[ ! -z $AUTH_BIN ]]; then
+    if [[ ! -f $AUTH_BIN ]]; then
+        echo "$AUTH_BIN not exists"
+    else
+        alias auth=$AUTH_BIN
+    fi
+fi
+
+auth --version
 
 # make alias work
 shopt -s expand_aliases
@@ -15,7 +29,7 @@ fi
 
 
 echo "Arg: $@"
-auth run  &
+auth --listen 0.0.0.0:8989 run  &
 
 # wait genesis
 sleep 30
