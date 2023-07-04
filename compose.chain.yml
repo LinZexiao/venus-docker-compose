@@ -66,18 +66,18 @@ services:
     depends_on:
       - auth
       - gateway
-  # market:
-  #   image: filvenus/droplet:v2.8.0
-  #   environment:
-  #     - TZ=${TZ-Asia/Shanghai}
-  #   volumes:
-  #     - ./.venus/env:/env
-  #     - ./.venus/root:/root
-  #     - ./.venus/data:/data
-  #     - ./compose:/compose
+  market:
+    image: filvenus/droplet:v2.8.1
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./.venus/data:/data
+      - ./compose:/compose
 
-  #   entrypoint: "/script/wait-for-it.sh messager:39812 -t 0  -- /compose/scripts/droplet.sh"
-  #   depends_on:
-  #     - auth
-  #     - node
-  #     - gateway
+    entrypoint: "/script/wait-for-it.sh messager:39812 -t 0  -- /compose/scripts/droplet.sh"
+    depends_on:
+      - auth
+      - node
+      - gateway
