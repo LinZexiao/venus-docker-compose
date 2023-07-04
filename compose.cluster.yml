@@ -1,7 +1,7 @@
 version: '3'
 services:
   vsm:
-    image: filvenus/venus-sector-manager:v0.6.0
+    image: filvenus/damocles-manager:v0.7.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
       # - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
@@ -11,10 +11,10 @@ services:
       - ./.venus/root:/root
       - ./.venus/data:/data
       - ./compose:/compose
-    entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-sector-manager.sh"
+    entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/damocles-manager.sh"
 
   worker1:
-    image: 0x5459/venus-worker:v0.6.6
+    image: filvenus/damocles-worker:v0.7.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
@@ -25,12 +25,12 @@ services:
       - ./.venus/root:/root
       - ./.venus/data:/data
       - ./compose:/compose
-    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-worker.sh"
+    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/damocles-worker.sh"
     depends_on:
       - vsm
 
   worker2:
-    image: 0x5459/venus-worker:v0.6.6
+    image: filvenus/damocles-worker:v0.7.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
@@ -42,7 +42,7 @@ services:
       - ./.venus/root:/root
       - ./.venus/data:/data
       - ./compose:/compose
-    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/venus-worker.sh"
+    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/damocles-worker.sh"
     depends_on:
       - vsm
 
@@ -57,7 +57,7 @@ services:
     entrypoint: "/script/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-tool.sh"
 
   wallet:
-    image: filvenus/venus-wallet:v1.11.0
+    image: filvenus/venus-wallet:v1.12.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - nettype=${NET_TYPE-2k}
@@ -68,7 +68,7 @@ services:
     entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-wallet.sh"
 
   client:
-    image: filvenus/market-client:v2.7.1
+    image: filvenus/droplet-client:v2.8.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -80,3 +80,15 @@ services:
     entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/market-client.sh"
     depends_on:
       - wallet
+
+  market:
+    image: filvenus/droplet:test
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+    volumes:
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./.venus/data:/data
+      - ./compose:/compose
+
+    entrypoint: "/script/wait-for-it.sh messager:39812 -t 0  -- /compose/scripts/droplet-offline.sh"

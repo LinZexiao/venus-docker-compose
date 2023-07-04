@@ -3,8 +3,8 @@ set -e
 
 # make alias work
 shopt -s expand_aliases
-alias gateway=/app/venus-gateway
-# check VENUS_WORKER_BIN is set
+alias gateway=/app/sophon-gateway
+# check GATEWAY_BIN is set
 if [[ ! -z $GATEWAY_BIN ]]; then
     if [[ ! -f $GATEWAY_BIN ]]; then
         echo "$GATEWAY_BIN not exists"

@@ -4,17 +4,17 @@ set -e
 
 # make alias work
 shopt -s expand_aliases
-alias venus-sector-manager=/venus-sector-manager
-# check VENUS_WORKER_BIN is set
+alias damocles-manager=/damocles-manager
+# check MANAGER_BIN is set
 if [[ ! -z $MANAGER_BIN ]]; then
     if [[ ! -f $MANAGER_BIN ]]; then
         echo "$MANAGER_BIN not exists"
     else
-        alias venus-sector-manager=$MANAGER_BIN
+        alias damocles-manager=$MANAGER_BIN
     fi
 fi
 
-venus-sector-manager --version
+damocles-manager --version
 
 if [[ -f /env/token ]];
 then
@@ -40,20 +40,20 @@ fi
 
 
 # config
-if [[ -d ~/.venus-sector-manager ]]; then
-    echo " repo ~/venus-sector-manager already exists"
+if [[ -d ~/.damocles-manager ]]; then
+    echo " repo ~/damocles-manager already exists"
 else
-    echo " repo ~/venus-sector-manager not exists, init it."
-    venus-sector-manager daemon init
+    echo " repo ~/damocles-manager not exists, init it."
+    damocles-manager daemon init
 
-    sed "s/<TOKEN>/$token/g" /compose/config/sector-manager.cfg > ~/.venus-sector-manager/sector-manager.cfg
-    sed -i "s/<ADDRESS>/$address/g" ~/.venus-sector-manager/sector-manager.cfg
+    sed "s/<TOKEN>/$token/g" /compose/config/sector-manager.cfg > ~/.damocles-manager/sector-manager.cfg
+    sed -i "s/<ADDRESS>/$address/g" ~/.damocles-manager/sector-manager.cfg
 
-    venus-sector-manager util miner create --from $address --sector-size 8MiB &> miner.log
+    damocles-manager util miner create --from $address --sector-size 8MiB &> miner.log
     miner=$(cat miner.log | grep 'miner actor:' | awk '{print $7}' )
     # Todo: use toml when it supports non-string
-    # /compose/bin/toml set ~/.venus-sector-manager/sector-manager.cfg Miners[0].Actor ${miner:2} > ~/.venus-sector-manager/sector-manager.cfg.tmp
-    # mv -f ~/.venus-sector-manager/sector-manager.cfg.tmp ~/.venus-sector-manager/sector-manager.cfg
+    # /compose/bin/toml set ~/.damocles-manager/sector-manager.cfg Miners[0].Actor ${miner:2} > ~/.damocles-manager/sector-manager.cfg.tmp
+    # mv -f ~/.damocles-manager/sector-manager.cfg.tmp ~/.damocles-manager/sector-manager.cfg
     if [[  ${miner:2} != 1002 ]]; then
         echo "unexpected miner: $miner"
         exit 1
@@ -67,10 +67,10 @@ if [[ ! -d /data/pieces/ ]]; then
     mkdir /data/pieces/
 fi
 
-if [[ ! -d /data/persist/ ]];
+if [[ ! -d /data/persist/ ]]; then
     mkdir /data/persist/
 fi
 
 # wait for node warm up
 sleep 30
-venus-sector-manager daemon run --poster --miner
+damocles-manager daemon run --poster --miner

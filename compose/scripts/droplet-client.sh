@@ -28,5 +28,5 @@ else
     Args="$Args --addr=$WALLET_ADDR"
 fi
 
-echo "EXEC: /app/market-client $Args \n\n"
-/app/market-client $Args 
+echo "EXEC: /app/droplet-client $Args \n\n"
+/app/droplet-client $Args 

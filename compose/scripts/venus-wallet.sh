@@ -25,7 +25,7 @@ if [[ ! -d /root/.venus_wallet ]]; then
     # set api
     ./venus-wallet $Args &
     sleep 1
-    pkill venus-wallet
+    kill $!
     /compose/bin/toml set /root/.venus_wallet/config.toml API.ListenAddress  /ip4/0.0.0.0/tcp/5678/http > /root/.venus_wallet/config.toml.tmp
     mv -f /root/.venus_wallet/config.toml.tmp /root/.venus_wallet/config.toml
 fi

@@ -8,20 +8,20 @@ token=$(cat /env/token )
 echo "token:"
 echo ${token}
 
-alias venus-market=/app/venus-market
+alias droplet=/app/droplet
 # check MARKET_BIN is set
 if [[ ! -z $MARKET_BIN ]]; then
     if [[ ! -f $MARKET_BIN ]]; then
         echo "$MARKET_BIN not exists"
     else
-        alias venus-market=$MARKET_BIN
+        alias droplet=$MARKET_BIN
     fi
 fi
-venus-market --version
+droplet --version
 
 
-if [[ -d ~/.venusmarket ]];then
-    venus-market run &
+if [[ -d ~/.droplet ]];then
+    droplet run &
 else
     Args="run "
     Args="$Args --auth-url=http://auth:8989"
@@ -32,14 +32,14 @@ else
     Args="$Args --messager-url=/dns/messager/tcp/39812/"
     Args="$Args --cs-token=${token}"
     Args="$Args --signer-type=gateway"
-    echo "EXEC: venus-market $Args \n\n"
-    venus-market $Args &
+    echo "EXEC: droplet $Args \n\n"
+    droplet $Args &
 
     sleep 30
-    exist=$(venus-market  piece-storage list | grep DefaultPieceStorage )
+    exist=$(droplet  piece-storage list | grep DefaultPieceStorage )
     if [ -z "$exist" ]; then
         echo "add piece storage"
-        venus-market piece-storage add-fs --name DefaultPieceStorage --path /data/pieces
+        droplet piece-storage add-fs --name DefaultPieceStorage --path /data/pieces
     fi
 
     #  todo : upsert miner , set peerid , set ask , set publish period

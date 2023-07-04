@@ -46,9 +46,9 @@ else
 
     # restart to change api
     echo "wait to restart ..."
-    sleep 20
+    sleep 30
     echo "restart ..."
-    pkill venus
+    kill $!
     jq '.api.apiAddress="/ip4/0.0.0.0/tcp/3453" ' ~/.venus/config.json > ~/.venus/config.json.tmp
     mv -f ~/.venus/config.json.tmp ~/.venus/config.json 
 
