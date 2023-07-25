@@ -42,7 +42,7 @@ services:
       - auth
 
   messager:
-    image: filvenus/sophon-messager:v1.12.0
+    image: filvenus/sophon-messager:test
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -55,7 +55,7 @@ services:
       - gateway
 
   miner:
-    image: filvenus/sophon-miner:v1.12.0-rc2
+    image: filvenus/sophon-miner:test
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -81,3 +81,13 @@ services:
       - auth
       - node
       - gateway
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "me"
+      MYSQL_PASSWORD: "pswd"
+    ports:
+      - "3306:3306"

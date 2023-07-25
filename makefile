@@ -41,4 +41,3 @@ clean-all:
 cluster_pre:
 	$(DC_CHAIN) exec auth /app/sophon-auth user miner add admin t01002
 	$(DC_CLUSTER) up -d wallet
-	sleep 5

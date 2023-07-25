@@ -1,16 +1,17 @@
 version: '3'
 services:
   vsm:
-    image: filvenus/damocles-manager:v0.7.0
+    image: filvenus/damocles-manager:test
     environment:
       - TZ=${TZ-Asia/Shanghai}
-      # - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
+      - MANAGER_BIN=/vs/damocles-manager
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./.venus/data:/data
       - ./compose:/compose
+      - ./.vscode:/vs
     entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/damocles-manager.sh"
 
   worker1:
@@ -29,32 +30,36 @@ services:
     depends_on:
       - vsm
 
-  worker2:
-    image: filvenus/damocles-worker:v0.7.0
-    environment:
-      - TZ=${TZ-Asia/Shanghai}
-      - BELLMAN_NO_GPU=1
-      # WORKER_NAME should be change for a new worker
-      - WORKER_NAME=worker2
-    volumes:
-      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
-      - ./.venus/env:/env
-      - ./.venus/root:/root
-      - ./.venus/data:/data
-      - ./compose:/compose
-    entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/damocles-worker.sh"
-    depends_on:
-      - vsm
+  # worker2:
+  #   image: filvenus/damocles-worker:v0.7.0
+  #   environment:
+  #     - TZ=${TZ-Asia/Shanghai}
+  #     - BELLMAN_NO_GPU=1
+  #     # WORKER_NAME should be change for a new worker
+  #     - WORKER_NAME=worker2
+  #   volumes:
+  #     - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+  #     - ./.venus/env:/env
+  #     - ./.venus/root:/root
+  #     - ./.venus/data:/data
+  #     - ./compose:/compose
+  #   entrypoint: "/compose/scripts//wait-for-it.sh vsm:1789 -t 0 -- /compose/scripts/damocles-worker.sh"
+  #   depends_on:
+  #     - vsm
 
   ssm:
-    image: filvenus/venus-tool:latest
+    image: filvenus/venus-tool:test
     environment:
       - TZ=${TZ-Asia/Shanghai}
+      - VENUS_TOOL_BIN=/vs/venus-tool
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-    entrypoint: "/script/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-tool.sh"
+      - ./.vscode:/vs
+    ports:
+      - 8090:8090
+    entrypoint: "/script/wait-for-it.sh vsm:1789 -t 0  -- /compose/scripts/venus-tool.sh"
 
   wallet:
     image: filvenus/venus-wallet:v1.12.0
@@ -77,11 +82,10 @@ services:
       - ./.venus/data:/data
       - ./compose:/compose
 
-    entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/market-client.sh"
+    entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/droplet-client.sh"
     depends_on:
       - wallet
-
-# luanch up market with chain serviece
+  # luanch up market with chain serviece
   # market:
   #   image: filvenus/droplet:test
   #   environment:
