@@ -21,12 +21,15 @@ Args="run "
 if [[ ! -d ~/.venustool ]]; then
 token=$(cat /env/token )
 wallet_api=$(cat /env/wallet_api )
+array=(${wallet_api//:/ })
+WALLET_TOKEN=${array[0]}
 
-Args="$Args --listen=0.0.0.0:12580"
+Args="$Args --listen=0.0.0.0:8090"
 Args="$Args --node-api=/dns/node/tcp/3453"
 Args="$Args --msg-api=/dns/messager/tcp/39812"
 Args="$Args --market-api=/dns/market/tcp/41235"
-Args="$Args --wallet-api=${wallet_api}"
+Args="$Args --miner-api=/dns/miner/tcp/12308"
+Args="$Args --wallet-api=${WALLET_TOKEN}:/dns/wallet/tcp/5678/http"
 Args="$Args --auth-api=http://auth:8989"
 Args="$Args --damocles-api=/dns/vsm/tcp/1789"
 Args="$Args --common-token=${token}"
