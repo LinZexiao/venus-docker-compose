@@ -1,7 +1,7 @@
 version: '3'
 services:
   vsm:
-    image: filvenus/damocles-manager:v0.7.0
+    image: filvenus/damocles-manager:test
     environment:
       - TZ=${TZ-Asia/Shanghai}
       # - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
@@ -80,8 +80,7 @@ services:
     entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/market-client.sh"
     depends_on:
       - wallet
-
-# luanch up market with chain serviece
+  # luanch up market with chain serviece
   # market:
   #   image: filvenus/droplet:test
   #   environment:

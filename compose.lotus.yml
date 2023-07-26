@@ -1,0 +1,83 @@
+# normally, genesis service is only used in test network, so the default image is for forcenet
+
+version: '3'
+services:
+  lotus:
+    image: tanlang/${NET_TYPE-2k}:nv19
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+      - LOTUS_API_LISTENADDRESS=/dns/lotus/tcp/1234/http
+      - LOTUS_LIBP2P_LISTENADDRESSES=/ip4/0.0.0.0/tcp/9090
+    healthcheck:
+      test: >-
+        curl -s -X POST -H "Content-Type: application/json" --data '{ "jsonrpc": "2.0", "method": "Filecoin.ChainHead", "params": [], "id": 1 }' http://lotus:1234/rpc/v0 || exit 1
+      interval: 20s
+      retries: 5
+      start_period: 6000s
+      timeout: 10s
+    # ports:
+    #   - "1234:1234"
+    #   - "9090:9090"
+    env_file:
+      - ./chain.env
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts/lotus.sh"
+
+  lotus-miner:
+    image: tanlang/${NET_TYPE-2k}:nv19
+    env_file:
+      - ./chain.env
+      # ports:
+      # - "2345:2345"
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+      - LOTUS_API_LISTENADDRESS=/dns/lotus-miner/tcp/2345/http
+      - LOTUS_API_REMOTELISTENADDRESS=lotus-miner:2345
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts/genesis-miner.sh"
+    healthcheck:
+      test: >-
+        curl -s http://lotus-miner:2345 || exit 1
+      interval: 20s
+      retries: 5
+      start_period: 6000s
+      timeout: 10s
+    depends_on:
+      lotus:
+        condition: service_healthy
+
+  miner2:
+    image: tanlang/${NET_TYPE-2k}:nv19
+    env_file:
+      - ./chain.env
+      # ports:
+      # - "2345:2345"
+    environment:
+      - TZ=${TZ-Asia/Shanghai}
+      - LOTUS_API_LISTENADDRESS=/dns/miner2/tcp/2345/http
+      - LOTUS_API_REMOTELISTENADDRESS=miner2:2345
+      - LOTUS_MINER_PATH=/root/.miner2
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+    entrypoint: "/compose/scripts/lotus-miner.sh"
+    healthcheck:
+      test: >-
+        curl -s http://miner2:2345 || exit 1
+      interval: 20s
+      retries: 5
+      start_period: 6000s
+      timeout: 10s
+    depends_on:
+      lotus:
+        condition: service_healthy

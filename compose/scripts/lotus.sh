@@ -4,13 +4,11 @@ set -e
 if [[ -d ~/.lotus ]]; then
     echo " repo ~/.lotus already exists"
     ./lotus daemon  &
-    sleep 15
-    ./lotus-miner run --nosync
 else
     echo " repo ~/.lotus not exists, init lotus."
         
     # as a genisis node, we need to rm all data remail from last time
-    rm -rf ~/.lotus ~/.genesis-sectors ~/.lotus-miner ~/genesis.car ~/.venus
+    rm -rf ~/.lotus ~/.genesis-sectors ~/genesis.car 
 
     # seed
     ./lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
@@ -34,13 +32,9 @@ else
     fi
 
 
-    sleep 15
-    # lotus wallet
-    ./lotus wallet import --as-default ~/.genesis-sectors/pre-seal-t01000.key
+    lotus wait-api
+    lotus wallet import --as-default ~/.genesis-sectors/pre-seal-t01000.key
     cp ~/.genesis-sectors/pre-seal-t01000.key /env/init.key
-
-    # lotus miner
-    ./lotus-miner init --genesis-miner --actor=t01000 --sector-size=2KiB --pre-sealed-sectors=~/.genesis-sectors --pre-sealed-metadata=~/.genesis-sectors/pre-seal-t01000.json --nosync
-
-    ./lotus-miner run --nosync
 fi
+
+wait
