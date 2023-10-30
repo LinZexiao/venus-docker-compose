@@ -3,7 +3,7 @@
 version: '3'
 services:
   genesis:
-    image: tanlang/${NET_TYPE-2k}:nv19
+    image: tanlang/${NET_TYPE-2k}:nv21
     environment:
       - TZ=${TZ-Asia/Shanghai}
     env_file:
