@@ -37,6 +37,9 @@ else
             sleep 5
         done
         bootstraper=$(cat /env/bootstrap )
+        if [[ $bootstraper == *"/ip4/127.0.0.1"* ]]; then
+            bootstraper=${bootstraper//\/ip4\/127.0.0.1/\/dns\/genesis}
+        fi
         Args="$Args --bootstrap-peers=$bootstraper"
     fi
 

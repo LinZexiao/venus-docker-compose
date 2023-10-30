@@ -38,6 +38,9 @@ sleep 3
 # output wallet api
 if [[ ! -f /env/wallet_api ]];then
 wallet_api=$(venus-wallet auth api-info --perm admin)
+    if [[ $wallet_api == *"/ip4/0.0.0.0"* ]]; then
+        wallet_api=${wallet_api//\/ip4\/0.0.0.0/\/dns\/wallet}
+    fi 
 echo "wallet_api: $wallet_api"
 echo $wallet_api > /env/wallet_api
 fi
@@ -57,7 +60,5 @@ then
     fi
     echo $ADDR > /env/wallet_address
 fi
-
-
 
 wait

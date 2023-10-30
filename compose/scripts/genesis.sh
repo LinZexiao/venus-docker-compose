@@ -27,6 +27,9 @@ else
     while [ -z "$bootstrap" ];do
         sleep 1
         bootstrap=`/app/lotus net listen | grep ip4 |awk 'NR==1'`
+        if [[ $bootstrap == *"/ip4/127.0.0.1"* ]]; then
+            bootstrap=${bootstrap//\/ip4\/127.0.0.1/\/dns\/genesis}
+        fi
         echo "bootstrap: $bootstrap"
     done
     if [ -d /env ]; then
