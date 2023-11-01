@@ -18,7 +18,7 @@ venus-tool --version
 
 Args="run "
 
-if [[ ! -d ~/.venustool ]]; then
+if [[ ! -d ~/.venus-tool ]]; then
 token=$(cat /env/token )
 wallet_api=$(cat /env/wallet_api )
 
@@ -29,6 +29,7 @@ Args="$Args --market-api=/dns/market/tcp/41235"
 Args="$Args --wallet-api=${wallet_api}"
 Args="$Args --auth-api=http://auth:8989"
 Args="$Args --damocles-api=/dns/vsm/tcp/1789"
+Args="$Args --miner-api=/dns/miner/tcp/12308"
 Args="$Args --common-token=${token}"
 
 fi
