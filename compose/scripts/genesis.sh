@@ -13,7 +13,7 @@ else
     rm -rf ~/.lotus ~/.genesis-sectors ~/.lotus-miner ~/genesis.car ~/.venus
 
     # seed
-    ./lotus-seed pre-seal --sector-size 2KiB --num-sectors 2
+    ./lotus-seed pre-seal --sector-size 2KiB --num-sectors 96
     ./lotus-seed genesis new --network-name $NET_TYPE localnet.json
     ./lotus-seed genesis add-miner localnet.json ~/.genesis-sectors/pre-seal-t01000.json
 
