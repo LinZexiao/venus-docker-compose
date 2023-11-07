@@ -14,4 +14,4 @@ then
     /app/sophon-miner init  --auth-api http://auth:8989 --token ${token} --gateway-api /dns/gateway/tcp/45132 --api /dns/node/tcp/3453 --slash-filter local
 fi
 
-/app/sophon-miner run --listen /ip4/0.0.0.0/tcp/12308
+/app/sophon-miner run --listen /ip4/0.0.0.0/tcp/12308 --nosync
