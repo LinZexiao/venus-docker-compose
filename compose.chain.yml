@@ -11,20 +11,84 @@ services:
     entrypoint: "/compose/scripts/sophon-auth.sh"
 
   node:
-    image: filvenus/venus:v1.14.0-rc1
+    image: filvenus/venus:test
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-      - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
-      - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
+      # - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
+      # - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
     environment:
       - HTTPS_PROXY=${proxy}
       - TZ=${TZ-Asia/Shanghai}
     env_file:
       - ./chain.env
-    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus.sh"
+    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus.sh "
+    # entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/dlv.sh -- /root/venus daemon"
+    depends_on:
+      - auth
+    ports:
+      - 2345:2345
+
+  node1:
+    image: filvenus/venus:test
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+      # - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
+      # - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
+    environment:
+      - HTTPS_PROXY=${proxy}
+      - TZ=${TZ-Asia/Shanghai}
+      - VENUS_PATH=~/.venus1
+    env_file:
+      - ./chain.env
+    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus.sh "
+    # entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/dlv.sh -- /root/venus daemon"
+    depends_on:
+      - auth
+
+  node2:
+    image: filvenus/venus:test
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+      # - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
+      # - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
+    environment:
+      - HTTPS_PROXY=${proxy}
+      - TZ=${TZ-Asia/Shanghai}
+      - VENUS_PATH=~/.venus2
+    env_file:
+      - ./chain.env
+    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/venus.sh "
+    # entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/dlv.sh -- /root/venus daemon"
+    depends_on:
+      - auth
+
+  node3:
+    image: filvenus/venus:test
+    volumes:
+      - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
+      - ./.venus/env:/env
+      - ./.venus/root:/root
+      - ./compose:/compose
+      # - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
+      # - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
+    environment:
+      - HTTPS_PROXY=${proxy}
+      - TZ=${TZ-Asia/Shanghai}
+      - VENUS_PATH=~/.venus3
+      - SNAP_SHOT=/root/snapshot.car
+    env_file:
+      - ./chain.env
+    entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  -- sleep infinity && /compose/scripts/venus.sh "
+    # entrypoint: "/script/wait-for-it.sh auth:8989 -t 0  --  /compose/scripts/dlv.sh -- /root/venus daemon"
     depends_on:
       - auth
 
@@ -55,7 +119,7 @@ services:
       - gateway
 
   miner:
-    image: filvenus/sophon-miner:v1.14.0-rc1
+    image: filvenus/sophon-miner:test
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
