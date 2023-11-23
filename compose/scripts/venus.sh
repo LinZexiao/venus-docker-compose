@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
 
-if [[ -d ~/.venus ]];then
+if [[ -z "$VENUS_PATH" ]];then 
+    VENUS_PATH="~/.venus"
+fi
+
+if [[ -d "$VENUS_PATH" ]];then
     /app/venus daemon
 else
 
