@@ -49,8 +49,9 @@ else
     sed "s/<TOKEN>/$token/g" /compose/config/sector-manager.cfg > ~/.damocles-manager/sector-manager.cfg
     sed -i "s/<ADDRESS>/$address/g" ~/.damocles-manager/sector-manager.cfg
 
-    damocles-manager util miner create --from $address --sector-size 8MiB &> miner.log
-    miner=$(cat miner.log | grep 'miner actor:' | awk '{print $7}' )
+    damocles-manager util miner create --from $address --sector-size 2KiB &> miner.log
+    # e.g: 'miner actor: f01002 (f2fkejepoehsrcrmtifnydslnkzqzb6hzuntey5ky)'
+    miner=$(cat miner.log | grep 'miner actor:' | awk '{print $3}' )
     # Todo: use toml when it supports non-string
     # /compose/bin/toml set ~/.damocles-manager/sector-manager.cfg Miners[0].Actor ${miner:2} > ~/.damocles-manager/sector-manager.cfg.tmp
     # mv -f ~/.damocles-manager/sector-manager.cfg.tmp ~/.damocles-manager/sector-manager.cfg
