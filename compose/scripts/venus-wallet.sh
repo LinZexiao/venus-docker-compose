@@ -16,15 +16,17 @@ then
     Args="$Args --nettype=$nettype"
 fi
 
-Args="$Args run --password=$PSWD --gateway-api=/dns/gateway/tcp/45132 --gateway-token=$token --support-accounts=admin"
+Args="$Args run --password=$PSWD "
 
 # check if /root/.venus_wallet/ exists
 if [[ ! -d /root/.venus_wallet ]]; then
     echo "not found ~/.venus_wallet, init it"
+
+    Args="$Args --gateway-api=/dns/gateway/tcp/45132 --gateway-token=$token --support-accounts=admin"
     
     # set api
     ./venus-wallet $Args &
-    sleep 1
+    sleep 3
     kill $!
     /compose/bin/toml set /root/.venus_wallet/config.toml API.ListenAddress  /ip4/0.0.0.0/tcp/5678/http > /root/.venus_wallet/config.toml.tmp
     mv -f /root/.venus_wallet/config.toml.tmp /root/.venus_wallet/config.toml
@@ -35,14 +37,18 @@ echo "EXEC: ./venus-wallet $Args \n\n"
 ./venus-wallet $Args &
 
 sleep 3
+# sleep infinity
+
 # output wallet api
 if [[ ! -f /env/wallet_api ]];then
-wallet_api=$(venus-wallet auth api-info --perm admin)
+    wallet_api=$(echo $PSWD | venus-wallet auth api-info --perm admin)
+
     if [[ $wallet_api == *"/ip4/0.0.0.0"* ]]; then
         wallet_api=${wallet_api//\/ip4\/0.0.0.0/\/dns\/wallet}
     fi 
-echo "wallet_api: $wallet_api"
-echo $wallet_api > /env/wallet_api
+    echo "wallet_api: $wallet_api"
+    wallet_api=$(echo $wallet_api | sed 's/Password:\*\{1,\}//' )
+    echo $wallet_api > /env/wallet_api
 fi
 
 addr_exist=$( venus-wallet list )
