@@ -1,7 +1,7 @@
 version: '3'
 services:
   vsm:
-    image: filvenus/damocles-manager:v0.7.0
+    image: filvenus/damocles-manager:v0.9.1
     environment:
       - TZ=${TZ-Asia/Shanghai}
       # - VENUS_SECTOR_MANAGER_BIN=/root/venus-sector-manager
@@ -14,7 +14,7 @@ services:
     entrypoint: "/compose/scripts/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/damocles-manager.sh"
 
   worker1:
-    image: filvenus/damocles-worker:v0.7.0
+    image: filvenus/damocles-worker:v0.9.1
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
@@ -30,7 +30,7 @@ services:
       - vsm
 
   worker2:
-    image: filvenus/damocles-worker:v0.7.0
+    image: filvenus/damocles-worker:v0.9.1
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - BELLMAN_NO_GPU=1
@@ -47,7 +47,7 @@ services:
       - vsm
 
   ssm:
-    image: filvenus/venus-tool:latest
+    image: filvenus/venus-tool:v0.1.3
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -55,9 +55,11 @@ services:
       - ./.venus/root:/root
       - ./compose:/compose
     entrypoint: "/script/wait-for-it.sh market:41235 -t 0  -- /compose/scripts/venus-tool.sh"
+    ports:
+      - 12580:12580
 
   wallet:
-    image: filvenus/venus-wallet:v1.12.0
+    image: filvenus/venus-wallet:v1.14.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
       - nettype=${NET_TYPE-2k}
@@ -65,10 +67,10 @@ services:
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-    entrypoint: "/script/wait-for-it.sh node:3453 -t 0  -- /compose/scripts/venus-wallet.sh"
+    entrypoint: "/script/wait-for-it.sh node:3453 -t 0  --  /compose/scripts/venus-wallet.sh"
 
   client:
-    image: filvenus/droplet-client:v2.8.0
+    image: filvenus/droplet-client:v2.10.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -77,11 +79,10 @@ services:
       - ./.venus/data:/data
       - ./compose:/compose
 
-    entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/market-client.sh"
+    entrypoint: "/script/wait-for-it.sh wallet:5678 -t 0  -- /compose/scripts/droplet-client.sh"
     depends_on:
       - wallet
-
-# luanch up market with chain serviece
+  # luanch up market with chain serviece
   # market:
   #   image: filvenus/droplet:test
   #   environment:
@@ -92,4 +93,4 @@ services:
   #     - ./.venus/data:/data
   #     - ./compose:/compose
 
-  #   entrypoint: "/script/wait-for-it.sh messager:39812 -t 0  -- /compose/scripts/droplet-offline.sh"
+  #   entrypoint: "/script/wait-for-it.sh messager:39812 -t 0 -- /compose/scripts/droplet-offline.sh"

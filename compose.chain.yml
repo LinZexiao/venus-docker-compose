@@ -1,7 +1,7 @@
 version: '3'
 services:
   auth:
-    image: filvenus/sophon-auth:v1.14.0-rc1
+    image: filvenus/sophon-auth:v1.14.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -11,14 +11,14 @@ services:
     entrypoint: "/compose/scripts/sophon-auth.sh"
 
   node:
-    image: filvenus/venus:v1.14.0-rc1
+    image: filvenus/venus:v1.14.0
     volumes:
       - ${proofparameters-/var/tmp/filecoin-proof-parameters/}:/var/tmp/filecoin-proof-parameters/
       - ./.venus/env:/env
       - ./.venus/root:/root
       - ./compose:/compose
-      - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
-      - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
+      # - ${SNAP_SHOT-/tmp/tmp}:/root/snapshot.car
+      # - ${GEN_FILE-/tmp/tmp}:/root/genesis.car
     environment:
       - HTTPS_PROXY=${proxy}
       - TZ=${TZ-Asia/Shanghai}
@@ -29,7 +29,7 @@ services:
       - auth
 
   gateway:
-    image: filvenus/sophon-gateway:v1.14.0-rc1
+    image: filvenus/sophon-gateway:v1.14.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:
@@ -42,7 +42,7 @@ services:
       - auth
 
   messager:
-    image: filvenus/sophon-messager:v1.14.0-rc1
+    image: filvenus/sophon-messager:v1.14.0
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -55,7 +55,7 @@ services:
       - gateway
 
   miner:
-    image: filvenus/sophon-miner:v1.14.0-rc1
+    image: filvenus/sophon-miner:v1.14.0
     volumes:
       - ./.venus/env:/env
       - ./.venus/root:/root
@@ -67,7 +67,7 @@ services:
       - auth
       - gateway
   market:
-    image: filvenus/droplet:v2.9.1
+    image: filvenus/droplet:v2.10.0
     environment:
       - TZ=${TZ-Asia/Shanghai}
     volumes:

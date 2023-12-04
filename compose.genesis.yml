@@ -6,7 +6,7 @@ services:
     image: tanlang/${NET_TYPE-2k}:nv21
     environment:
       - TZ=${TZ-Asia/Shanghai}
-      - LOTUS_CHAINSTORE_ENABLESPLITSTORE=0
+      # - LOTUS_CHAINSTORE_ENABLESPLITSTORE=0
     env_file:
       - ./chain.env
     volumes:
